@@ -11785,7 +11785,7 @@ div#notebook {
 </ol>
 <p>We will compare the above approaches to generate novel image captions.</p>
 <h2 id="RNN-as-Language-Generator">RNN as Language Generator<a class="anchor-link" href="#RNN-as-Language-Generator">&#182;</a></h2><p>Many work on image captioning has been done using this approach (<a href="https://cs.stanford.edu/people/karpathy/cvpr2015.pdf">Karpathy et al</a>, <a href="https://www.cv-foundation.org/openaccess/content_cvpr_2015/papers/Chen_Minds_Eye_A_2015_CVPR_paper.pdf">Chen et al</a>). In our approach, we will use a simplied model where the image features are concatenated with word embeddings and fed into a RNN. 
-<img src="postRNN.svg" alt="Langurage Generator"></p>
+<img src="./postRNN.svg" alt="Langurage Generator"></p>
 <h3 id="Neural-Network-Model">Neural Network Model<a class="anchor-link" href="#Neural-Network-Model">&#182;</a></h3><p>The features of the images to be captioned are extracted using a VGG16 CNN that as been pretrained using ImageNet data. The output of the FC8 layer of VGG16 is fed to another dense layer to extract the image feature. The weights of the VGG16 CNN are frozen when we train our RNN language generator. The additional dense layer is trainable</p>
 <p>The words are embedded using the pretrained wording GloVE embeddings. The embeddings are not trained further in our generative model.</p>
 <p>The image features and word embeddings are concatenated together and input to an LSTM RNN. Te output of the RNN is sampled as used as caption to the image. A special "START" token is used to initialize the generation process, and the process is terminated when an "END" token is sampled.</p>
