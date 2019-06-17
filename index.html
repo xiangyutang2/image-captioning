@@ -11771,6 +11771,43 @@ div#notebook {
   <div tabindex="-1" id="notebook" class="border-box-sizing">
     <div class="container" id="notebook-container">
 
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[1]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="o">%%</span><span class="k">HTML</span>
+&lt;style&gt;
+div.prompt {display:none} #div.prompt {display:&quot;&quot;} div.prompt {display:none} 
+&lt;/style&gt;
+</pre></div>
+
+</div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+<div class="prompt"></div>
+
+
+
+<div class="output_html rendered_html output_subarea ">
+<style>
+div.prompt {display:none} #div.prompt {display:""} div.prompt {display:none} 
+</style>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div>
 <div class="inner_cell">
@@ -11887,12 +11924,37 @@ shortest among all references. By default, we use the shortest.</p>
 </div>
 </div>
 </div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="Image-Caption-using-RNN-as-a-Language-Model">Image Caption using RNN as a Language Model<a class="anchor-link" href="#Image-Caption-using-RNN-as-a-Language-Model">&#182;</a></h1><p>In this project we will generate image captions using the RNN as a language model. We will proceed with the following steps.</p>
+<ol>
+<li><p>Using pretrained CNN to extract image features. A pretrained VGG16 CNN will be used to extract image features which will be concatenated with the RNN output</p>
+</li>
+<li><p>Prepare training data. The training captions will be tokenized and embedded using the GLOVE word embeddings. The embeddings will be fed into the RNN.</p>
+</li>
+<li><p>Model definition</p>
+</li>
+<li><p>Training the model</p>
+</li>
+<li><p>Generating novel image captions using the trained model. Test images and images from the internet will be used as input to the trained model to generate captions. The captions will be examined to determine the weaknesses of the model and suggest improvements.</p>
+</li>
+<li><p>Beam search. We will use beam search to generate better captions using the model.</p>
+</li>
+<li><p>Model evaluation. The model will be evaluated using the BLEU and ROUGE metric.</p>
+</li>
+</ol>
+<h1 id="1.-Obtain-Features-Using-Pre-trained-Image-Models">1. Obtain Features Using Pre-trained Image Models<a class="anchor-link" href="#1.-Obtain-Features-Using-Pre-trained-Image-Models">&#182;</a></h1>
+</div>
+</div>
+</div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[273]:</div>
+<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">os</span> <span class="k">import</span> <span class="n">listdir</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># from os import listdir</span>
 <span class="kn">from</span> <span class="nn">pickle</span> <span class="k">import</span> <span class="n">dump</span>
 <span class="kn">from</span> <span class="nn">pickle</span> <span class="k">import</span> <span class="n">load</span>
 <span class="kn">from</span> <span class="nn">keras.applications.vgg16</span> <span class="k">import</span> <span class="n">VGG16</span>
@@ -11925,49 +11987,18 @@ shortest among all references. By default, we use the shortest.</p>
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="1.-Obtain-Features-Using-Pre-trained-Image-Models">1. Obtain Features Using Pre-trained Image Models<a class="anchor-link" href="#1.-Obtain-Features-Using-Pre-trained-Image-Models">&#182;</a></h1>
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[115]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">base_model</span> <span class="o">=</span> <span class="n">VGG16</span><span class="p">(</span><span class="n">include_top</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-</pre></div>
+<p>The VGG16 model is used to extract the image features. We first load the model.</p>
 
 </div>
 </div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area">
-
-<div class="prompt"></div>
-
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>WARNING:tensorflow:From C:\Users\1\Anaconda3\lib\site-packages\tensorflow\python\framework\op_def_library.py:263: colocate_with (from tensorflow.python.framework.ops) is deprecated and will be removed in a future version.
-Instructions for updating:
-Colocations handled automatically by placer.
-</pre>
-</div>
-</div>
-
-</div>
-</div>
-
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
 <div class="prompt input_prompt">In&nbsp;[116]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">base_model</span><span class="o">.</span><span class="n">summary</span><span class="p">()</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">base_model</span> <span class="o">=</span> <span class="n">VGG16</span><span class="p">(</span><span class="n">include_top</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">base_model</span><span class="o">.</span><span class="n">summary</span><span class="p">()</span>
 </pre></div>
 
 </div>
@@ -12045,25 +12076,22 @@ _________________________________________________________________
 </div>
 
 </div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[117]:</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
 <div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">Model</span><span class="p">(</span><span class="n">inputs</span><span class="o">=</span><span class="n">base_model</span><span class="o">.</span><span class="n">input</span><span class="p">,</span> <span class="n">outputs</span><span class="o">=</span><span class="n">base_model</span><span class="o">.</span><span class="n">get_layer</span><span class="p">(</span><span class="s1">&#39;fc2&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">output</span><span class="p">)</span>
-</pre></div>
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>The feature extraction model will use the VGG16 input as model input. However, the second last layer "fc2" of VGG16 will be used as the output of our extraction model. This is so because we do not need the final softmax layer of VGG16.</p>
 
 </div>
 </div>
-</div>
-
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
 <div class="prompt input_prompt">In&nbsp;[118]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">model</span><span class="o">.</span><span class="n">summary</span><span class="p">()</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">Model</span><span class="p">(</span><span class="n">inputs</span><span class="o">=</span><span class="n">base_model</span><span class="o">.</span><span class="n">input</span><span class="p">,</span> <span class="n">outputs</span><span class="o">=</span><span class="n">base_model</span><span class="o">.</span><span class="n">get_layer</span><span class="p">(</span><span class="s1">&#39;fc2&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">output</span><span class="p">)</span>
+<span class="n">model</span><span class="o">.</span><span class="n">summary</span><span class="p">()</span>
 </pre></div>
 
 </div>
@@ -12138,6 +12166,15 @@ _________________________________________________________________
 </div>
 </div>
 
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>After the image model has been defined, we will use it to extract the features of all the images.</p>
+
+</div>
+</div>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
@@ -12682,133 +12719,6 @@ maximum image caption length = 33
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[277]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">define_model</span><span class="p">(</span><span class="n">vocab_size</span><span class="p">,</span> <span class="n">max_length</span><span class="p">,</span> <span class="n">embedding_matrix</span><span class="p">):</span>
-    <span class="c1"># feature extractor model</span>
-    <span class="n">inputs1</span> <span class="o">=</span> <span class="n">Input</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="mi">4096</span><span class="p">,))</span>
-    <span class="n">image_feature</span> <span class="o">=</span> <span class="n">Dropout</span><span class="p">(</span><span class="mf">0.5</span><span class="p">)(</span><span class="n">inputs1</span><span class="p">)</span>
-    <span class="n">image_feature</span> <span class="o">=</span> <span class="n">Dense</span><span class="p">(</span><span class="mi">256</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s1">&#39;relu&#39;</span><span class="p">)(</span><span class="n">image_feature</span><span class="p">)</span>
-    <span class="c1"># sequence model</span>
-    <span class="n">inputs2</span> <span class="o">=</span> <span class="n">Input</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="n">max_length</span><span class="p">,))</span>
-    <span class="n">language_feature</span> <span class="o">=</span> <span class="n">Embedding</span><span class="p">(</span><span class="n">vocab_size</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="n">weights</span><span class="o">=</span><span class="p">[</span><span class="n">embedding_matrix</span><span class="p">],</span> <span class="n">input_length</span><span class="o">=</span><span class="n">max_length</span><span class="p">,</span> <span class="n">trainable</span><span class="o">=</span><span class="kc">False</span><span class="p">)(</span><span class="n">inputs2</span><span class="p">)</span>
-    <span class="c1">#Embedding(vocab_size, 256, mask_zero=True)(inputs2) #&lt;&lt;&lt;&lt;&lt;&lt; fix me, add pretrianed embedding</span>
-    <span class="n">language_feature</span> <span class="o">=</span> <span class="n">Dropout</span><span class="p">(</span><span class="mf">0.5</span><span class="p">)(</span><span class="n">language_feature</span><span class="p">)</span>
-    <span class="n">language_feature</span> <span class="o">=</span> <span class="n">LSTM</span><span class="p">(</span><span class="mi">256</span><span class="p">)(</span><span class="n">language_feature</span><span class="p">)</span>
-    <span class="c1"># decoder model</span>
-    <span class="n">output</span> <span class="o">=</span> <span class="n">add</span><span class="p">([</span><span class="n">image_feature</span><span class="p">,</span> <span class="n">language_feature</span><span class="p">])</span>
-    <span class="n">output</span> <span class="o">=</span> <span class="n">Dense</span><span class="p">(</span><span class="mi">256</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s1">&#39;relu&#39;</span><span class="p">)(</span><span class="n">output</span><span class="p">)</span>
-    <span class="n">output</span> <span class="o">=</span> <span class="n">Dense</span><span class="p">(</span><span class="n">vocab_size</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s1">&#39;softmax&#39;</span><span class="p">)(</span><span class="n">output</span><span class="p">)</span>
-    <span class="c1"># tie it together [image, seq] [word]</span>
-    <span class="n">model</span> <span class="o">=</span> <span class="n">Model</span><span class="p">(</span><span class="n">inputs</span><span class="o">=</span><span class="p">[</span><span class="n">inputs1</span><span class="p">,</span> <span class="n">inputs2</span><span class="p">],</span> <span class="n">outputs</span><span class="o">=</span><span class="n">output</span><span class="p">)</span>
-    <span class="n">model</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">loss</span><span class="o">=</span><span class="s1">&#39;categorical_crossentropy&#39;</span><span class="p">,</span> <span class="n">optimizer</span><span class="o">=</span><span class="s1">&#39;adam&#39;</span><span class="p">)</span>
-    <span class="c1"># summarize model</span>
-    <span class="nb">print</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">summary</span><span class="p">())</span>
-    <span class="n">plot_model</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">to_file</span><span class="o">=</span><span class="s1">&#39;model.png&#39;</span><span class="p">,</span> <span class="n">show_shapes</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">model</span>
-</pre></div>
-
-</div>
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[2]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">fid</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;embedding_matrix.pkl&quot;</span><span class="p">,</span><span class="s2">&quot;rb&quot;</span><span class="p">)</span>
-<span class="n">embedding_matrix</span> <span class="o">=</span> <span class="n">load</span><span class="p">(</span><span class="n">fid</span><span class="p">)</span>
-<span class="n">fid</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
-</pre></div>
-
-</div>
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[278]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">caption_max_length</span> <span class="o">=</span> <span class="mi">33</span>
-<span class="n">vocab_size</span> <span class="o">=</span> <span class="mi">7506</span>
-<span class="n">post_rnn_model</span> <span class="o">=</span> <span class="n">define_model</span><span class="p">(</span><span class="n">vocab_size</span><span class="p">,</span> <span class="n">caption_max_length</span><span class="p">,</span> <span class="n">embedding_matrix</span><span class="p">)</span>
-</pre></div>
-
-</div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area">
-
-<div class="prompt"></div>
-
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>__________________________________________________________________________________________________
-Layer (type)                    Output Shape         Param #     Connected to                     
-==================================================================================================
-input_7 (InputLayer)            (None, 33)           0                                            
-__________________________________________________________________________________________________
-input_6 (InputLayer)            (None, 4096)         0                                            
-__________________________________________________________________________________________________
-embedding_3 (Embedding)         (None, 33, 50)       375300      input_7[0][0]                    
-__________________________________________________________________________________________________
-dropout_5 (Dropout)             (None, 4096)         0           input_6[0][0]                    
-__________________________________________________________________________________________________
-dropout_6 (Dropout)             (None, 33, 50)       0           embedding_3[0][0]                
-__________________________________________________________________________________________________
-dense_7 (Dense)                 (None, 256)          1048832     dropout_5[0][0]                  
-__________________________________________________________________________________________________
-lstm_3 (LSTM)                   (None, 256)          314368      dropout_6[0][0]                  
-__________________________________________________________________________________________________
-add_3 (Add)                     (None, 256)          0           dense_7[0][0]                    
-                                                                 lstm_3[0][0]                     
-__________________________________________________________________________________________________
-dense_8 (Dense)                 (None, 256)          65792       add_3[0][0]                      
-__________________________________________________________________________________________________
-dense_9 (Dense)                 (None, 7506)         1929042     dense_8[0][0]                    
-==================================================================================================
-Total params: 3,733,334
-Trainable params: 3,358,034
-Non-trainable params: 375,300
-__________________________________________________________________________________________________
-None
-</pre>
-</div>
-</div>
-
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p><img src="model.png" alt="post rnn model"></p>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="Try-a-Concat-model">Try a Concat model<a class="anchor-link" href="#Try-a-Concat-model">&#182;</a></h3>
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
 <div class="prompt input_prompt">In&nbsp;[279]:</div>
 <div class="inner_cell">
     <div class="input_area">
@@ -12951,39 +12861,6 @@ None
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">batch_size</span> <span class="o">=</span> <span class="mi">6</span>
-<span class="n">steps</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">image_captions_train</span><span class="p">)</span>
-<span class="n">steps_per_epoch</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="n">steps</span><span class="o">/</span><span class="n">batch_size</span><span class="p">)</span>
-
-<span class="n">epochs</span> <span class="o">=</span> <span class="mi">2</span>
-
-<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">epochs</span><span class="p">):</span>
-	<span class="c1"># create the data generator</span>
-	<span class="n">generator</span> <span class="o">=</span> <span class="n">data_generator</span><span class="p">(</span><span class="n">image_captions_train</span><span class="p">,</span> <span class="n">image_features</span><span class="p">,</span> <span class="n">caption_train_tokenizer</span><span class="p">,</span> <span class="n">caption_max_length</span><span class="p">,</span> <span class="n">batch_size</span><span class="p">,</span> <span class="n">vocab_size</span><span class="p">)</span>
-	<span class="c1"># fit for one epoch</span>
-	<span class="n">post_rnn_model</span><span class="o">.</span><span class="n">fit_generator</span><span class="p">(</span><span class="n">generator</span><span class="p">,</span> <span class="n">epochs</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">steps_per_epoch</span><span class="o">=</span><span class="n">steps</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-	<span class="c1"># save model</span>
-	<span class="n">post_rnn_model</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="s1">&#39;model_3_&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;.h5&#39;</span><span class="p">)</span>
-</pre></div>
-
-</div>
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="Training-the-Concat-Model">Training the Concat Model<a class="anchor-link" href="#Training-the-Concat-Model">&#182;</a></h3>
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
 <div class="prompt input_prompt">In&nbsp;[287]:</div>
 <div class="inner_cell">
     <div class="input_area">
@@ -13026,19 +12903,6 @@ Epoch 1/1
 </div>
 </div>
 
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[307]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">post_rnn_model_concat</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="s1">&#39;modelConcat_1a_&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;.h5&#39;</span><span class="p">)</span>
-</pre></div>
-
-</div>
 </div>
 </div>
 
@@ -13239,14 +13103,14 @@ Epoch 1/1
 </tr>
 </tbody>
 </table>
-<p>The caption for the right image is quite accurate, even it is not detailed enough to contain the colors of the dogs. The caption for the right image is detailed enough to contain the color of the shirt, and it also got the action right, which is running throught the grass. However, it got one of the most important feature of the image wrong, which is the gender of the runner! It identified it as a boy instead of a young women.</p>
+<p>The caption for the right image is quite accurate, even if it is not detailed enough to contain the colors of the dogs. The caption for the left image is detailed enough to contain the color of the shirt, and it also got the action right, which is running throught the grass. However, it got one of the most important feature of the image wrong, which is the gender of the runner! It identified it as a boy instead of a young women.</p>
 <p>The error could be caused by several factors:</p>
 <ol>
-<li><p>The model needs more training iterations. We only trained 3 epochs due to limited hardware capabilities. We should train for at least 20 epochs to get better results. We can also fine tune the hyper-parameters to get better accuracy</p>
+<li><p>The model needs more training. The model only trained 3 epochs due to limited hardware capabilities. Training for at least 20 epochs will get better results. We can also fine tune the hyper-parameters to get better accuracy</p>
 </li>
-<li><p>Our training samples size may not be big enough. We only have 6000 images in our training sample. The image set may not contain a lot of pictures with women that have their haired tied up in a pony tail, and thus mistaken the young women for a boy. The image set may also not contain enough pictures with a path running across a grassy field in a park. To improve the accuracy of the description we can increase the training set size.</p>
+<li><p>The training samples size may not be big enough. There are only 6000 images in the training sample. The image set may not contain a lot of pictures with women that have their haired tied up in a pony tail, and thus the model mistakes the young women for a boy. The image set may also not contain enough pictures with a path running across a grassy field in a park. To improve the accuracy of the description we can increase the training set size.</p>
 </li>
-<li><p>The CNN model and word embeddings are not trained. In our model, the VGG16 CNN used to extract the images as well as the GLOVE embeddings are fixed during training. We can train some of the VGG16 layers or even all of the layers further. We can also traing the word embeddings as well</p>
+<li><p>The CNN model and word embeddings weights are not trained. In the model, the VGG16 CNN used to extract the images as well as the GLOVE embeddings are fixed during training. We can train some of the VGG16 layers or even all of its layers. We can also traing the word embeddings.</p>
 </li>
 <li><p>Each time a candidate for the next word in the caption is generated, we take the word with the highest probability as given by the softmax layer. We may want to consider sampling from the candidates or consider several candidates at the same time.</p>
 </li>
@@ -13358,7 +13222,7 @@ Epoch 1/1
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[338]:</div>
+<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">photo</span> <span class="o">=</span> <span class="n">extract_feature</span><span class="p">(</span><span class="n">feature_extract_pred_model</span><span class="p">,</span> <span class="s1">&#39;running-dogs.jpg&#39;</span><span class="p">)</span>
@@ -13375,47 +13239,17 @@ Epoch 1/1
 </div>
 </div>
 
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area">
-
-<div class="prompt"></div>
-
-
-<div class="output_subarea output_stream output_stderr output_text">
-<pre>C:\Users\1\Anaconda3\lib\site-packages\ipykernel_launcher.py:22: RuntimeWarning: divide by zero encountered in log
-</pre>
-</div>
-</div>
-
-<div class="output_area">
-
-<div class="prompt"></div>
-
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>[&#39;lean brown dog is running through the grass&#39;, &#39;black dog is running through the grass&#39;, &#39;brown dog is running through the grass&#39;, &#39;black dog runs through the grass&#39;, &#39;brown dog runs through the grass&#39;]
-[-0.7353067  -0.67086774 -0.64314866 -0.53557354 -0.5245497 ]
-</pre>
-</div>
-</div>
-
-</div>
-</div>
-
 </div>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>We generate the caption for picture of young woman in pink shirt running in the park again to see if there is any improvement. This time we use beam search with beam width 10. We list the 10 captions generated by the model below the image along with their log-probability. Note that since probability is less than 1, the log-probabilities are always negative, and a higher number indicates higher probability. So, the first caption listed is the least probable, and the last caption listed is the most likely according to the model.</p>
+<p>We generate the caption for picture of young woman in pink shirt running in the park again to see if there is any improvement. This time we use beam search with beam width 10. We list the 10 captions generated by the model below the image along with their normalized log-probability. Note that since probability is less than 1, the log-probabilities are always negative, and a higher number indicates higher probability. So, the first caption listed is the least probable, and the last caption listed is the most likely according to the model.</p>
 <p><img src="women in pink running in park.jpg" width="500"/></p>
 <table>
 <thead><tr>
 <th>Caption</th>
-<th>Score</th>
+<th>Score (higher the better)</th>
 </tr>
 </thead>
 <tbody>
@@ -13461,7 +13295,7 @@ Epoch 1/1
 </tr>
 </tbody>
 </table>
-<p>This time, all captions except 1 correctly identified the gender of the runner. This suggests that a large factor in the inaccuracies of the model is process by which the next word is chosen, and beam search thus can increase the performance of the model. The 10 caption candidates generated by the model mostly differ in the color of the shirt (pink vs red) and her action (walk vs run). The caption with the highest generated probability (-0.98) is "young girl in pink shirt is walking through the grass". Whereas the correct caption identified by a human would be the fourth highest "young girl in pink shirt is running through the grass". This tells us that there is still a lot of improvement that can be done.</p>
+<p>This time, all captions except 1 correctly identified the gender of the runner. This suggests that a large factor in the inaccuracies of the model is the process by which the next word is chosen, and beam search thus can increase the performance of the model. The 10 caption candidates generated by the model mostly differ in the color of the shirt (pink vs red) and her action (walking vs running). The caption with the highest generated probability (-0.98) is "young girl in pink shirt is walking through the grass". Whereas the correct caption identified by a human would be the fourth highest "young girl in pink shirt is running through the grass". This tells us that there is still a lot of improvement which can be done.</p>
 <p>Looking at individual captions generated by the model can identify weaknesses of the model and suggest directions of improvement. However, to measure the performance of the model overall we need to use a metric. In NLP, there are several metrics used. We use the BLEU and the ROUGE metric to measure our model.</p>
 
 </div>
@@ -13471,14 +13305,14 @@ Epoch 1/1
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="7-Evaluating-Caption-Results">7 Evaluating Caption Results<a class="anchor-link" href="#7-Evaluating-Caption-Results">&#182;</a></h1><h1 id="7.1-BLEU">7.1 BLEU<a class="anchor-link" href="#7.1-BLEU">&#182;</a></h1><p>The NLTK package contains a BLEU score implementation. We use it here</p>
+<h1 id="7-Evaluating-Caption-Results">7 Evaluating Caption Results<a class="anchor-link" href="#7-Evaluating-Caption-Results">&#182;</a></h1><p>We test our image caption model on the 1000 test images. The output will be evaluated using the BLEU and the ROUGE metrics.</p>
 
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[302]:</div>
+<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">pickle</span> <span class="k">import</span> <span class="n">load</span>
@@ -13502,7 +13336,7 @@ Epoch 1/1
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[310]:</div>
+<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">fid</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;features.pkl&quot;</span><span class="p">,</span><span class="s2">&quot;rb&quot;</span><span class="p">)</span>
@@ -13523,7 +13357,7 @@ Epoch 1/1
 <span class="n">pred_model</span> <span class="o">=</span> <span class="n">load_model</span><span class="p">(</span><span class="s1">&#39;modelConcat_1a_2.h5&#39;</span><span class="p">)</span>
 <span class="c1">#pred_model = load_model(&#39;model_3_0.h5&#39;)</span>
 
-<span class="n">base_model</span> <span class="o">=</span> <span class="n">VGG16</span><span class="p">(</span><span class="n">include_top</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">base_model</span> <span class="o">=</span> <span class="n">VGG16</span><span class="p">(</span><span class="n">include_top</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="c1">#define the image feature extraction model</span>
 <span class="n">feature_extract_pred_model</span> <span class="o">=</span> <span class="n">Model</span><span class="p">(</span><span class="n">inputs</span><span class="o">=</span><span class="n">base_model</span><span class="o">.</span><span class="n">input</span><span class="p">,</span> <span class="n">outputs</span><span class="o">=</span><span class="n">base_model</span><span class="o">.</span><span class="n">get_layer</span><span class="p">(</span><span class="s1">&#39;fc2&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">output</span><span class="p">)</span>
 </pre></div>
 
@@ -13531,6 +13365,15 @@ Epoch 1/1
 </div>
 </div>
 
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>We first use the greedy method to generate each word in the caption. That is, at each step we choose the word with the highest probability.</p>
+
+</div>
+</div>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
@@ -13554,106 +13397,18 @@ Epoch 1/1
 </div>
 
 </div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[313]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="c1">#greedy bleu</span>
-<span class="kn">from</span> <span class="nn">nltk.translate.bleu_score</span> <span class="k">import</span> <span class="n">sentence_bleu</span>
-<span class="kn">from</span> <span class="nn">nltk.translate.bleu_score</span> <span class="k">import</span> <span class="n">SmoothingFunction</span>
-
-<span class="c1">#fid = open(&quot;test_captions_post_concat&quot;,&quot;rb&quot;)</span>
-<span class="c1">#image_captions_candidate = load(fid)</span>
-<span class="c1">#fid.close()</span>
-
-<span class="n">bleu_score</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
-<span class="k">for</span> <span class="n">image_fileName</span><span class="p">,</span> <span class="n">reference_captions</span> <span class="ow">in</span> <span class="n">image_captions_test</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-    <span class="n">ref_cap_reformat</span><span class="o">=</span><span class="nb">list</span><span class="p">()</span>
-    <span class="k">for</span> <span class="n">cap</span> <span class="ow">in</span> <span class="n">reference_captions</span><span class="p">:</span>
-        <span class="n">ref_cap_reformat</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cap</span><span class="o">.</span><span class="n">split</span><span class="p">()[</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
-    
-    <span class="n">bleu_score</span><span class="p">[</span><span class="n">image_fileName</span><span class="p">]</span> <span class="o">=</span> <span class="n">sentence_bleu</span><span class="p">(</span><span class="n">ref_cap_reformat</span><span class="p">,</span> <span class="n">image_captions_candidate</span><span class="p">[</span><span class="n">image_fileName</span><span class="p">],</span> <span class="n">smoothing_function</span><span class="o">=</span><span class="n">chencherry</span><span class="o">.</span><span class="n">method1</span><span class="p">)</span>
-
-<span class="c1">#print(bleu_score)</span>
-</pre></div>
-
-</div>
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[315]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">bleu_score_array</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">fromiter</span><span class="p">(</span><span class="n">bleu_score</span><span class="o">.</span><span class="n">values</span><span class="p">(),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;mean=&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">bleu_score_array</span><span class="p">))</span> <span class="o">+</span> <span class="s1">&#39;; median=&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">median</span><span class="p">(</span><span class="n">bleu_score_array</span><span class="p">))</span><span class="o">+</span><span class="s1">&#39;; max=&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">bleu_score_array</span><span class="p">))</span><span class="o">+</span><span class="s1">&#39;; min=&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">bleu_score_array</span><span class="p">))</span><span class="o">+</span><span class="s1">&#39;; std=&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">bleu_score_array</span><span class="p">)))</span>
-</pre></div>
-
-</div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area">
-
-<div class="prompt"></div>
-
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>mean=0.09317244230678938; median=0.056122223243057295; max=1.0; min=0.0; std=0.11398568034184466
-</pre>
-</div>
-</div>
-
-</div>
-</div>
-
-</div>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="7.2-ROUGE">7.2 ROUGE<a class="anchor-link" href="#7.2-ROUGE">&#182;</a></h2><p>The original ROUGE metric was written in Perl, and a copy can be <a href="https://github.com/kylehg/summarizer/blob/master/rouge/ROUGE-1.5.5.pl">downloaded</a>. A <a href="https://pypi.org/project/pyrouge/0.1.0/">python wrapper</a> is needed to used it.</p>
-<p>Installing the Pearl script and the python wrapper is tedious, especially since there is no active support for the original ROUGE pearl script. The script has been ported to python, and pure python implementations are available.</p>
-<p>We use the ROUGE <a href="https://github.com/google/seq2seq/blob/master/seq2seq/metrics/rouge.py">implementation</a> by the Google seq2seq project. This implementation is not an exact copy of the original Pearl script as <a href="https://github.com/google/seq2seq/issues/89">explained</a> by the authors.</p>
+<p>We then use beam search to generate the captions. The beam width parameter is a hyper-parameter that can be tuned. Often a beam width of 10 is used to get the best results. We use a beam width of 5 to speedup the computation.</p>
 
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[239]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="c1">#greedy rouge</span>
-<span class="kn">from</span> <span class="nn">rouge</span> <span class="k">import</span> <span class="n">rouge</span>
-
-<span class="n">rouge_score</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
-<span class="k">for</span> <span class="n">image_fileName</span><span class="p">,</span> <span class="n">reference_captions</span> <span class="ow">in</span> <span class="n">image_captions_test</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-    <span class="n">cand</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">image_captions_candidate</span><span class="p">[</span><span class="n">image_fileName</span><span class="p">])]</span>
-    <span class="n">ref_cap_reformat</span><span class="o">=</span><span class="nb">list</span><span class="p">()</span>
-    <span class="k">for</span> <span class="n">cap</span> <span class="ow">in</span> <span class="n">reference_captions</span><span class="p">:</span>
-        <span class="n">ref_cap_reformat</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">cap</span><span class="o">.</span><span class="n">split</span><span class="p">()[</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]))</span>
-    
-    <span class="n">rouge_score</span><span class="p">[</span><span class="n">image_fileName</span><span class="p">]</span> <span class="o">=</span> <span class="n">rouge</span><span class="p">(</span><span class="n">cand</span><span class="p">,</span> <span class="n">ref_cap_reformat</span><span class="p">)</span>
-
-<span class="c1">#print(rouge_score)</span>
-</pre></div>
-
-</div>
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[316]:</div>
+<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">fid</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;features.pkl&#39;</span><span class="p">,</span><span class="s1">&#39;rb&#39;</span><span class="p">)</span>
@@ -13682,47 +13437,159 @@ Epoch 1/1
 </div>
 </div>
 
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area">
-
-<div class="prompt"></div>
-
-
-<div class="output_subarea output_stream output_stderr output_text">
-<pre>C:\Users\1\Anaconda3\lib\site-packages\ipykernel_launcher.py:22: RuntimeWarning: divide by zero encountered in log
-</pre>
 </div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="7.1-BLEU">7.1 BLEU<a class="anchor-link" href="#7.1-BLEU">&#182;</a></h1><p>The NLTK package contains a BLEU score implementation. We use it here to evaluate the caption generated by our model.</p>
 
 </div>
 </div>
-
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[317]:</div>
+<div class="prompt input_prompt">In&nbsp;[7]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># beam5 bleu</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1">#greedy bleu</span>
 <span class="kn">from</span> <span class="nn">nltk.translate.bleu_score</span> <span class="k">import</span> <span class="n">sentence_bleu</span>
 <span class="kn">from</span> <span class="nn">nltk.translate.bleu_score</span> <span class="k">import</span> <span class="n">SmoothingFunction</span>
+<span class="kn">from</span> <span class="nn">pickle</span> <span class="k">import</span> <span class="n">load</span>
 
-<span class="c1">#fid = open(&quot;test_captions_beam5_pre&quot;,&quot;rb&quot;)</span>
-<span class="c1">#image_captions_candidate_beam5 = load(fid)</span>
-<span class="c1">#fid.close()</span>
+<span class="n">fid</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;test_captions_post_concat&quot;</span><span class="p">,</span><span class="s2">&quot;rb&quot;</span><span class="p">)</span>
+<span class="n">image_captions_candidate</span> <span class="o">=</span> <span class="n">load</span><span class="p">(</span><span class="n">fid</span><span class="p">)</span>
+<span class="n">fid</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 
+<span class="n">fid</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;test_captions_concate_beam5_post&quot;</span><span class="p">,</span><span class="s2">&quot;rb&quot;</span><span class="p">)</span>
+<span class="n">image_captions_candidate_beam5</span> <span class="o">=</span> <span class="n">load</span><span class="p">(</span><span class="n">fid</span><span class="p">)</span>
+<span class="n">fid</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+<span class="n">fid</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;image_captions_test.pkl&quot;</span><span class="p">,</span><span class="s2">&quot;rb&quot;</span><span class="p">)</span>
+<span class="n">image_captions_test</span> <span class="o">=</span> <span class="n">load</span><span class="p">(</span><span class="n">fid</span><span class="p">)</span>
+<span class="n">fid</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+<span class="n">chencherry</span> <span class="o">=</span> <span class="n">SmoothingFunction</span><span class="p">()</span>
+
+<span class="n">bleu_score</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
 <span class="n">bleu_score_beam5</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
 <span class="k">for</span> <span class="n">image_fileName</span><span class="p">,</span> <span class="n">reference_captions</span> <span class="ow">in</span> <span class="n">image_captions_test</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
     <span class="n">ref_cap_reformat</span><span class="o">=</span><span class="nb">list</span><span class="p">()</span>
     <span class="k">for</span> <span class="n">cap</span> <span class="ow">in</span> <span class="n">reference_captions</span><span class="p">:</span>
         <span class="n">ref_cap_reformat</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cap</span><span class="o">.</span><span class="n">split</span><span class="p">()[</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
     
+    <span class="n">bleu_score</span><span class="p">[</span><span class="n">image_fileName</span><span class="p">]</span> <span class="o">=</span> <span class="n">sentence_bleu</span><span class="p">(</span><span class="n">ref_cap_reformat</span><span class="p">,</span> <span class="n">image_captions_candidate</span><span class="p">[</span><span class="n">image_fileName</span><span class="p">],</span> <span class="n">smoothing_function</span><span class="o">=</span><span class="n">chencherry</span><span class="o">.</span><span class="n">method1</span><span class="p">)</span>
     <span class="n">bleu_score_beam5</span><span class="p">[</span><span class="n">image_fileName</span><span class="p">]</span> <span class="o">=</span> <span class="n">sentence_bleu</span><span class="p">(</span><span class="n">ref_cap_reformat</span><span class="p">,</span> <span class="nb">list</span><span class="p">(</span><span class="n">image_captions_candidate_beam5</span><span class="p">[</span><span class="n">image_fileName</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">()),</span> <span class="n">smoothing_function</span><span class="o">=</span><span class="n">chencherry</span><span class="o">.</span><span class="n">method1</span><span class="p">)</span>
-
+    
+    
 <span class="c1">#print(bleu_score)</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>We then use numpy to examine the BLEU scores.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="n">bleu_score_array</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">fromiter</span><span class="p">(</span><span class="n">bleu_score</span><span class="o">.</span><span class="n">values</span><span class="p">(),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;mean bleu=&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">bleu_score_array</span><span class="p">))</span> <span class="o">+</span> <span class="s1">&#39;; median bleu=&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">median</span><span class="p">(</span><span class="n">bleu_score_array</span><span class="p">))</span><span class="o">+</span><span class="s1">&#39;; max bleu=&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">bleu_score_array</span><span class="p">))</span><span class="o">+</span><span class="s1">&#39;; min bleu=&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">bleu_score_array</span><span class="p">))</span><span class="o">+</span><span class="s1">&#39;; std bleu=&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">bleu_score_array</span><span class="p">)))</span>
+
+<span class="n">bleu_score_beam_5array</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">fromiter</span><span class="p">(</span><span class="n">bleu_score_beam5</span><span class="o">.</span><span class="n">values</span><span class="p">(),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;mean beam5 bleu=&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">bleu_score_beam_5array</span><span class="p">))</span> <span class="o">+</span> <span class="s1">&#39;; median beam5 bleu=&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">median</span><span class="p">(</span><span class="n">bleu_score_beam_5array</span><span class="p">))</span><span class="o">+</span><span class="s1">&#39;; max beam5 bleu=&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">bleu_score_beam_5array</span><span class="p">))</span><span class="o">+</span><span class="s1">&#39;; min beam5 bleu=&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">bleu_score_beam_5array</span><span class="p">))</span><span class="o">+</span><span class="s1">&#39;; std beam5 bleu=&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">bleu_score_beam_5array</span><span class="p">)))</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>The statitics of the BLEU scores are listed in the table below. Note that the average BLEU score for beam search is higher than the greedy algorithm, as expected.</p>
+<table>
+<thead><tr>
+<th style="text-align:center">BLEU Score</th>
+<th>Greedy</th>
+<th>Beam Search width 5</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">mean</td>
+<td>0.0932</td>
+<td>0.0985</td>
+</tr>
+<tr>
+<td style="text-align:center">median</td>
+<td>0.0561</td>
+<td>0.0581</td>
+</tr>
+<tr>
+<td style="text-align:center">max</td>
+<td>1</td>
+<td>0.8307</td>
+</tr>
+<tr>
+<td style="text-align:center">min</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr>
+<td style="text-align:center">STD</td>
+<td>0.114</td>
+<td>0.116</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="7.2-ROUGE">7.2 ROUGE<a class="anchor-link" href="#7.2-ROUGE">&#182;</a></h2><p>The original ROUGE metric was written in Perl, and a copy can be <a href="https://github.com/kylehg/summarizer/blob/master/rouge/ROUGE-1.5.5.pl">downloaded</a>. A python wrapper, <a href="https://pypi.org/project/pyrouge/0.1.0/">pyrouge,</a> is needed to used it.</p>
+<p>Installing the original Pearl script and the python wrapper is tedious, especially since there is no active support for the original ROUGE pearl script. The script has been ported to python, and pure python implementations are available.</p>
+<p>We use the ROUGE <a href="https://github.com/google/seq2seq/blob/master/seq2seq/metrics/rouge.py">implementation</a> by the Google seq2seq project. This implementation is not an exact copy of the original Pearl script as <a href="https://github.com/google/seq2seq/issues/89">explained</a> by the authors.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[10]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1">#greedy rouge</span>
+<span class="kn">from</span> <span class="nn">rouge</span> <span class="k">import</span> <span class="n">rouge</span>
+
+<span class="n">rouge_score</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+<span class="k">for</span> <span class="n">image_fileName</span><span class="p">,</span> <span class="n">reference_captions</span> <span class="ow">in</span> <span class="n">image_captions_test</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+    <span class="n">cand</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">image_captions_candidate</span><span class="p">[</span><span class="n">image_fileName</span><span class="p">])]</span>
+    <span class="n">ref_cap_reformat</span><span class="o">=</span><span class="nb">list</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">cap</span> <span class="ow">in</span> <span class="n">reference_captions</span><span class="p">:</span>
+        <span class="n">ref_cap_reformat</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">cap</span><span class="o">.</span><span class="n">split</span><span class="p">()[</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]))</span>
+    
+    <span class="n">rouge_score</span><span class="p">[</span><span class="n">image_fileName</span><span class="p">]</span> <span class="o">=</span> <span class="n">rouge</span><span class="p">(</span><span class="n">cand</span><span class="p">,</span> <span class="n">ref_cap_reformat</span><span class="p">)</span>
+
+<span class="c1">#print(rouge_score)</span>
 </pre></div>
 
 </div>
@@ -13732,7 +13599,7 @@ Epoch 1/1
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[240]:</div>
+<div class="prompt input_prompt">In&nbsp;[14]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1">#rouge beam5</span>
@@ -13757,182 +13624,38 @@ Epoch 1/1
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[318]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">bleu_score_array</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">fromiter</span><span class="p">(</span><span class="n">bleu_score</span><span class="o">.</span><span class="n">values</span><span class="p">(),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;mean bleu=&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">bleu_score_array</span><span class="p">))</span> <span class="o">+</span> <span class="s1">&#39;; median bleu=&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">median</span><span class="p">(</span><span class="n">bleu_score_array</span><span class="p">))</span><span class="o">+</span><span class="s1">&#39;; max bleu=&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">bleu_score_array</span><span class="p">))</span><span class="o">+</span><span class="s1">&#39;; min bleu=&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">bleu_score_array</span><span class="p">))</span><span class="o">+</span><span class="s1">&#39;; std bleu=&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">bleu_score_array</span><span class="p">)))</span>
-
-<span class="n">bleu_score_beam_5array</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">fromiter</span><span class="p">(</span><span class="n">bleu_score_beam5</span><span class="o">.</span><span class="n">values</span><span class="p">(),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;mean beam5 bleu=&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">bleu_score_beam_5array</span><span class="p">))</span> <span class="o">+</span> <span class="s1">&#39;; median beam5 bleu=&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">median</span><span class="p">(</span><span class="n">bleu_score_beam_5array</span><span class="p">))</span><span class="o">+</span><span class="s1">&#39;; max beam5 bleu=&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">bleu_score_beam_5array</span><span class="p">))</span><span class="o">+</span><span class="s1">&#39;; min beam5 bleu=&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">bleu_score_beam_5array</span><span class="p">))</span><span class="o">+</span><span class="s1">&#39;; std beam5 bleu=&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">bleu_score_beam_5array</span><span class="p">)))</span>
-</pre></div>
-
-</div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area">
-
-<div class="prompt"></div>
-
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>mean bleu=0.09317244230678938; median bleu=0.056122223243057295; max bleu=1.0; min bleu=0.0; std bleu=0.11398568034184466
-mean beam5 bleu=0.09849077952959204; median beam5 bleu=0.05814299103970878; max beam5 bleu=0.8307018474412792; min beam5 bleu=0.0; std beam5 bleu=0.1158538218358743
-</pre>
-</div>
-</div>
-
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<table>
-<thead><tr>
-<th style="text-align:center">Bleu Stat</th>
-<th>Greedy</th>
-<th>Beam5</th>
-<th>Greedy Concat</th>
-<th>Beam5 Concat</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center">mean</td>
-<td>0.0905</td>
-<td>0.0924</td>
-<td>0.0932</td>
-<td>0.0985</td>
-</tr>
-<tr>
-<td style="text-align:center">median</td>
-<td>0.0537</td>
-<td>0.0531</td>
-<td>0.0561</td>
-<td>0.0581</td>
-</tr>
-<tr>
-<td style="text-align:center">max</td>
-<td>0.846</td>
-<td>0.863</td>
-<td>1</td>
-<td>0.8307</td>
-</tr>
-<tr>
-<td style="text-align:center">min</td>
-<td>0</td>
-<td>0</td>
-<td>0</td>
-<td>0</td>
-</tr>
-<tr>
-<td style="text-align:center">STD</td>
-<td>0.111</td>
-<td>0.109</td>
-<td>0.114</td>
-<td>0.0116</td>
-</tr>
-</tbody>
-</table>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[267]:</div>
+<div class="prompt input_prompt">In&nbsp;[18]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">num_test</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">rouge_score_beam5</span><span class="p">)</span>
 
 
-<span class="n">rouge_1_r_score_beam5_array</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">num_test</span><span class="p">)</span>
-<span class="n">rouge_1_p_score_beam5_array</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">num_test</span><span class="p">)</span>
+<span class="n">rouge_1_f_score_beam5_array</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">num_test</span><span class="p">)</span>
 <span class="n">rouge_2_f_score_beam5_array</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">num_test</span><span class="p">)</span>
-<span class="n">rouge_2_r_score_beam5_array</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">num_test</span><span class="p">)</span>
-<span class="n">rouge_2_p_score_beam5_array</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">num_test</span><span class="p">)</span>
 <span class="n">rouge_l_f_score_beam5_array</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">num_test</span><span class="p">)</span>
-<span class="n">rouge_l_r_score_beam5_array</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">num_test</span><span class="p">)</span>
-<span class="n">rouge_l_p_score_beam5_array</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">num_test</span><span class="p">)</span>
 
 <span class="n">idx</span> <span class="o">=</span> <span class="mi">0</span>
 <span class="k">for</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">rouge_score_beam5</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
-    <span class="n">rouge_1_r_score_beam5_array</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span><span class="p">[</span><span class="s1">&#39;rouge_1/r_score&#39;</span><span class="p">]</span>
-    <span class="n">rouge_1_p_score_beam5_array</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span><span class="p">[</span><span class="s1">&#39;rouge_1/p_score&#39;</span><span class="p">]</span>
+    <span class="n">rouge_1_f_score_beam5_array</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span><span class="p">[</span><span class="s1">&#39;rouge_1/f_score&#39;</span><span class="p">]</span>
     <span class="n">rouge_2_f_score_beam5_array</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span><span class="p">[</span><span class="s1">&#39;rouge_2/f_score&#39;</span><span class="p">]</span>
-    <span class="n">rouge_2_r_score_beam5_array</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span><span class="p">[</span><span class="s1">&#39;rouge_2/r_score&#39;</span><span class="p">]</span>
-    <span class="n">rouge_2_p_score_beam5_array</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span><span class="p">[</span><span class="s1">&#39;rouge_2/p_score&#39;</span><span class="p">]</span>
     <span class="n">rouge_l_f_score_beam5_array</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span><span class="p">[</span><span class="s1">&#39;rouge_l/f_score&#39;</span><span class="p">]</span>
-    <span class="n">rouge_l_r_score_beam5_array</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span><span class="p">[</span><span class="s1">&#39;rouge_l/r_score&#39;</span><span class="p">]</span>
-    <span class="n">rouge_l_p_score_beam5_array</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span><span class="p">[</span><span class="s1">&#39;rouge_l/p_score&#39;</span><span class="p">]</span>
     <span class="n">idx</span> <span class="o">+=</span> <span class="mi">1</span>
     
 
-<span class="n">rouge_1_r_score_array</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">num_test</span><span class="p">)</span>
-<span class="n">rouge_1_p_score_array</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">num_test</span><span class="p">)</span>
+<span class="n">rouge_1_f_score_array</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">num_test</span><span class="p">)</span>
 <span class="n">rouge_2_f_score_array</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">num_test</span><span class="p">)</span>
-<span class="n">rouge_2_r_score_array</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">num_test</span><span class="p">)</span>
-<span class="n">rouge_2_p_score_array</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">num_test</span><span class="p">)</span>
 <span class="n">rouge_l_f_score_array</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">num_test</span><span class="p">)</span>
-<span class="n">rouge_l_r_score_array</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">num_test</span><span class="p">)</span>
-<span class="n">rouge_l_p_score_array</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">num_test</span><span class="p">)</span>
 
 <span class="n">idx</span> <span class="o">=</span> <span class="mi">0</span>
 <span class="k">for</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">rouge_score</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
-    <span class="n">rouge_1_r_score_array</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span><span class="p">[</span><span class="s1">&#39;rouge_1/r_score&#39;</span><span class="p">]</span>
-    <span class="n">rouge_1_p_score_array</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span><span class="p">[</span><span class="s1">&#39;rouge_1/p_score&#39;</span><span class="p">]</span>
+    <span class="n">rouge_1_f_score_array</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span><span class="p">[</span><span class="s1">&#39;rouge_1/f_score&#39;</span><span class="p">]</span>
     <span class="n">rouge_2_f_score_array</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span><span class="p">[</span><span class="s1">&#39;rouge_2/f_score&#39;</span><span class="p">]</span>
-    <span class="n">rouge_2_r_score_array</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span><span class="p">[</span><span class="s1">&#39;rouge_2/r_score&#39;</span><span class="p">]</span>
-    <span class="n">rouge_2_p_score_array</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span><span class="p">[</span><span class="s1">&#39;rouge_2/p_score&#39;</span><span class="p">]</span>
     <span class="n">rouge_l_f_score_array</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span><span class="p">[</span><span class="s1">&#39;rouge_l/f_score&#39;</span><span class="p">]</span>
-    <span class="n">rouge_l_r_score_array</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span><span class="p">[</span><span class="s1">&#39;rouge_l/r_score&#39;</span><span class="p">]</span>
-    <span class="n">rouge_l_p_score_array</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span><span class="p">[</span><span class="s1">&#39;rouge_l/p_score&#39;</span><span class="p">]</span>
     <span class="n">idx</span> <span class="o">+=</span> <span class="mi">1</span>
     
 </pre></div>
 
 </div>
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[268]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;rouge 1 r beam5 mean=&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">rouge_1_r_score_beam5_array</span><span class="p">))</span> <span class="o">+</span> <span class="s1">&#39;; rouge 2 r beam5 mean=&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">rouge_2_r_score_beam5_array</span><span class="p">))</span> <span class="o">+</span> <span class="s1">&#39;; rouge l r beam5 mean=&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">rouge_l_r_score_beam5_array</span><span class="p">)))</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;rouge 1 r mean=&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">rouge_1_r_score_array</span><span class="p">))</span> <span class="o">+</span> <span class="s1">&#39;; rouge 2 r mean=&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">rouge_2_r_score_array</span><span class="p">))</span> <span class="o">+</span> <span class="s1">&#39;; rouge l r mean=&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">rouge_l_r_score_array</span><span class="p">)))</span>
-</pre></div>
-
-</div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area">
-
-<div class="prompt"></div>
-
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>rouge 1 r beam5 mean=0.22039372071427027; rouge 2 r beam5 mean=0.05889712214342245; rouge l r beam5 mean=0.20602002397327476
-rouge 1 r mean=0.20850272380268509; rouge 2 r mean=0.04696651727959004; rouge l r mean=0.1959513191701659
-</pre>
-</div>
-</div>
-
 </div>
 </div>
 
@@ -13941,89 +13664,29 @@ rouge 1 r mean=0.20850272380268509; rouge 2 r mean=0.04696651727959004; rouge l 
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
+<p>The ROUGE scores means are listed in the table below. Beam search has higher scores than the greedy algorithm.</p>
 <table>
 <thead><tr>
 <th style="text-align:center">Stat</th>
 <th>Greedy Mean</th>
-<th>Beam5 Mean</th>
-<th>Greedy Median</th>
-<th>Beam5 Median</th>
-<th>Greedy Max</th>
-<th>Beam5 Max</th>
+<th>Beam Search Mean</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td style="text-align:center">rouge_1/r_score</td>
-<td>0.20</td>
-<td>0.22</td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td style="text-align:center">rouge_1/p_score</td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
+<td style="text-align:center">rouge_1/f_score</td>
+<td>0.212</td>
+<td>0.213</td>
 </tr>
 <tr>
 <td style="text-align:center">rouge_2/f_score</td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td style="text-align:center">rouge_2/r_score</td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td style="text-align:center">rouge_2/p_score</td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
+<td>0.0538</td>
+<td>0.0582</td>
 </tr>
 <tr>
 <td style="text-align:center">rouge_l/f_score</td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td style="text-align:center">rouge_l/r_score</td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td style="text-align:center">rouge_l/p_score</td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
+<td>0.183</td>
+<td>0.184</td>
 </tr>
 </tbody>
 </table>
