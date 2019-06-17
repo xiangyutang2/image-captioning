@@ -11771,43 +11771,6 @@ div#notebook {
   <div tabindex="-1" id="notebook" class="border-box-sizing">
     <div class="container" id="notebook-container">
 
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[1]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="o">%%</span><span class="k">HTML</span>
-&lt;style&gt;
-div.prompt {display:none} #div.prompt {display:&quot;&quot;} div.prompt {display:none} 
-&lt;/style&gt;
-</pre></div>
-
-</div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area">
-
-<div class="prompt"></div>
-
-
-
-<div class="output_html rendered_html output_subarea ">
-<style>
-div.prompt {display:none} #div.prompt {display:""} div.prompt {display:none} 
-</style>
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div>
 <div class="inner_cell">
@@ -11826,7 +11789,9 @@ div.prompt {display:none} #div.prompt {display:""} div.prompt {display:none}
 <h3 id="Neural-Network-Model">Neural Network Model<a class="anchor-link" href="#Neural-Network-Model">&#182;</a></h3><p>The features of the images to be captioned are extracted using a VGG16 CNN that as been pretrained using ImageNet data. The output of the FC8 layer of VGG16 is fed to another dense layer to extract the image feature. The weights of the VGG16 CNN are frozen when we train our RNN language generator. The additional dense layer is trainable</p>
 <p>The words are embedded using the pretrained wording GloVE embeddings. The embeddings are not trained further in our generative model.</p>
 <p>The image features and word embeddings are concatenated together and input to an LSTM RNN. Te output of the RNN is sampled as used as caption to the image. A special "START" token is used to initialize the generation process, and the process is terminated when an "END" token is sampled.</p>
-<h3 id="Training">Training<a class="anchor-link" href="#Training">&#182;</a></h3><h3 id="Training-Loss">Training Loss<a class="anchor-link" href="#Training-Loss">&#182;</a></h3><h2 id="RNN-as-Language-Model">RNN as Language Model<a class="anchor-link" href="#RNN-as-Language-Model">&#182;</a></h2><p>Using RNN as a language model is not as common as the previous approach, but there are some very good results which have better performance than the previous approach (<a href="https://arxiv.org/abs/1412.6632">Mao et al</a>). In our approach, the word embeddings are input to the RNN, and the final state of the RNN is combined with image features and input to another neural network to predict the next word in the caption.</p>
+<h3 id="Training">Training<a class="anchor-link" href="#Training">&#182;</a></h3><p>TBD</p>
+<h3 id="Training-Loss">Training Loss<a class="anchor-link" href="#Training-Loss">&#182;</a></h3><p>TBD</p>
+<h2 id="RNN-as-Language-Model">RNN as Language Model<a class="anchor-link" href="#RNN-as-Language-Model">&#182;</a></h2><p>Using RNN as a language model is not as common as the previous approach, but there are some very good results which have better performance than the previous approach (<a href="https://arxiv.org/abs/1412.6632">Mao et al</a>). In our approach, the word embeddings are input to the RNN, and the final state of the RNN is combined with image features and input to another neural network to predict the next word in the caption.</p>
 <h3 id="Neural-Network-Model">Neural Network Model<a class="anchor-link" href="#Neural-Network-Model">&#182;</a></h3><p>Similarily to using the RNN as language generator, the features of the images to be captioned are extracted using a VGG16 CNN that as been pretrained using ImageNet data. We use the output of the FC8 layer of VGG16 as the image feature. The weights of the VGG16 CNN are frozen when we train our RNN language generator.</p>
 <p>The words are also embedded using the pretrained wording GloVE embeddings. The embeddings are not trained further in our generative model.</p>
 <p>The word embeddings of the partially generated caption are then used as input to an LSTM RNN. The final state of the RNN is combined with the extracted image features and input to another neural network to predict the next word in the caption. A special "START" token is used to initialize the generation process, and the process is terminated when an "END" token is sampled.</p>
@@ -12236,7 +12201,7 @@ _________________________________________________________________
 <li>Remove all numbers and punctuations</li>
 <li>Change all letters to lower case</li>
 <li>Remove words containing single characters</li>
-<li>Add 'SOS' and 'EOS' to the target data</li>
+<li>Add 'START' and 'END' to the target data</li>
 </ol>
 <p>Removing all punctuation can be achieved through</p>
 <p>The string.maketrans() method. This method takes 3 arguments:</p>
@@ -12327,6 +12292,7 @@ Class for vectorizing texts, or/and turning texts into sequences (=list of word 
 </ul>
 </li>
 </ul>
+<p>We first define a function that can load the training/test/dev ids that are stored in corresponding files.</p>
 
 </div>
 </div>
@@ -12370,6 +12336,21 @@ Class for vectorizing texts, or/and turning texts into sequences (=list of word 
 </div>
 </div>
 
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>After the images for each set is identified, we clean up the captions by:</p>
+<ol>
+<li>Remove all numbers and punctuations</li>
+<li>Change all letters to lower case</li>
+<li>Remove words containing single characters</li>
+<li>Add 'START' and 'END' to the target data</li>
+</ol>
+
+</div>
+</div>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
@@ -12819,7 +12800,8 @@ None
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="4--Training-Model">4  Training Model<a class="anchor-link" href="#4--Training-Model">&#182;</a></h1>
+<h1 id="4--Training-Model">4  Training Model<a class="anchor-link" href="#4--Training-Model">&#182;</a></h1><p>We use the progressive loading data generator to generate the training data on-the-fly. For each batch, we generate training data from 6 images.</p>
+
 </div>
 </div>
 </div>
@@ -12847,11 +12829,11 @@ None
 <span class="n">caption_max_length</span> <span class="o">=</span> <span class="mi">33</span>
 <span class="n">batch_size</span> <span class="o">=</span> <span class="mi">100</span>
 <span class="n">vocab_size</span> <span class="o">=</span> <span class="mi">7506</span>
-<span class="n">generator</span> <span class="o">=</span> <span class="n">data_generator</span><span class="p">(</span><span class="n">image_captions_train</span><span class="p">,</span> <span class="n">image_features</span><span class="p">,</span> <span class="n">caption_train_tokenizer</span><span class="p">,</span> <span class="n">caption_max_length</span><span class="p">,</span> <span class="n">batch_size</span><span class="p">,</span> <span class="n">vocab_size</span><span class="p">)</span>
+<span class="c1">#generator = data_generator(image_captions_train, image_features, caption_train_tokenizer, caption_max_length, batch_size, vocab_size)</span>
 
-<span class="n">epochs</span> <span class="o">=</span> <span class="mi">2</span>
-<span class="n">steps</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">image_captions_train</span><span class="p">)</span>
-<span class="n">steps_per_epoch</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="n">steps</span><span class="o">/</span><span class="n">batch_size</span><span class="p">)</span>
+<span class="c1">#epochs = 2</span>
+<span class="c1">#steps = len(image_captions_train)</span>
+<span class="c1">#steps_per_epoch = np.floor(steps/batch_size)</span>
 </pre></div>
 
 </div>
@@ -12911,6 +12893,7 @@ Epoch 1/1
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
+<p>The training is terminated after 3 epochs. The loss was around 8 at beginning of the training process. It quickly went down to 3 ater 3 epochs. Training more epochs will further reduce loss.</p>
 <h1 id="5-Creating-Captions-using-Trained-Model">5 Creating Captions using Trained Model<a class="anchor-link" href="#5-Creating-Captions-using-Trained-Model">&#182;</a></h1><p>The model should converge farily quickly, within a few hours or so. We can finally generate some captions and see how well it does.</p>
 
 </div>
@@ -13693,6 +13676,43 @@ Epoch 1/1
 
 </div>
 </div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[2]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="o">%%</span><span class="k">HTML</span>
+&lt;style&gt;
+div.prompt {display:none} #div.prompt {display:&quot;&quot;} div.prompt {display:none} 
+&lt;/style&gt;
+</pre></div>
+
+</div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+<div class="prompt"></div>
+
+
+
+<div class="output_html rendered_html output_subarea ">
+<style>
+div.prompt {display:none} #div.prompt {display:""} div.prompt {display:none} 
+</style>
+</div>
+
+</div>
+
+</div>
+</div>
+
 </div>
     </div>
   </div>
