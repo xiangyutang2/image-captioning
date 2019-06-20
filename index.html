@@ -11784,18 +11784,18 @@ div#notebook {
 </li>
 </ol>
 <p>We will compare the above approaches to generate novel image captions.</p>
-<h2 id="RNN-as-Language-Generator">RNN as Language Generator<a class="anchor-link" href="#RNN-as-Language-Generator">&#182;</a></h2><p>Many work on image captioning has been done using this approach (<a href="https://cs.stanford.edu/people/karpathy/cvpr2015.pdf">Karpathy et al</a>, <a href="https://www.cv-foundation.org/openaccess/content_cvpr_2015/papers/Chen_Minds_Eye_A_2015_CVPR_paper.pdf">Chen et al</a>). In our approach, we will use a simplied model where the image features are concatenated with word embeddings and fed into a RNN. 
-<img src="./postRNN.svg" alt="Langurage Generator"></p>
+<h2 id="RNN-as-Language-Generator">RNN as Language Generator<a class="anchor-link" href="#RNN-as-Language-Generator">&#182;</a></h2><p>Many work on image captioning has been done using this approach (<a href="https://cs.stanford.edu/people/karpathy/cvpr2015.pdf">Karpathy et al</a>, <a href="https://www.cv-foundation.org/openaccess/content_cvpr_2015/papers/Chen_Minds_Eye_A_2015_CVPR_paper.pdf">Chen et al</a>). A simple approach is where the image features are concatenated with word embeddings and fed into a RNN. 
+<img src="./preRNN.svg" alt="Langurage Generator"></p>
 <h3 id="Neural-Network-Model">Neural Network Model<a class="anchor-link" href="#Neural-Network-Model">&#182;</a></h3><p>The features of the images to be captioned are extracted using a VGG16 CNN that as been pretrained using ImageNet data. The output of the FC8 layer of VGG16 is fed to another dense layer to extract the image feature. The weights of the VGG16 CNN are frozen when we train our RNN language generator. The additional dense layer is trainable</p>
 <p>The words are embedded using the pretrained wording GloVE embeddings. The embeddings are not trained further in our generative model.</p>
 <p>The image features and word embeddings are concatenated together and input to an LSTM RNN. Te output of the RNN is sampled as used as caption to the image. A special "START" token is used to initialize the generation process, and the process is terminated when an "END" token is sampled.</p>
-<h3 id="Training">Training<a class="anchor-link" href="#Training">&#182;</a></h3><p>TBD</p>
-<h3 id="Training-Loss">Training Loss<a class="anchor-link" href="#Training-Loss">&#182;</a></h3><p>TBD</p>
-<h2 id="RNN-as-Language-Model">RNN as Language Model<a class="anchor-link" href="#RNN-as-Language-Model">&#182;</a></h2><p>Using RNN as a language model is not as common as the previous approach, but there are some very good results which have better performance than the previous approach (<a href="https://arxiv.org/abs/1412.6632">Mao et al</a>). In our approach, the word embeddings are input to the RNN, and the final state of the RNN is combined with image features and input to another neural network to predict the next word in the caption.</p>
+<h3 id="Training">Training<a class="anchor-link" href="#Training">&#182;</a></h3><p>At each time step of the RNN the a word in the training caption will be fed into the input of the RNN. The out of the RNN will be compared with the ground truth next word. For example, if the caption is "the weather is great and the time is now". The training input would be "START the weather is great and the time is now", one word at a time. The output of the RNN at each time step will be compared with "the weather is great and the time is now END" to generate the loss.</p>
+<h3 id="Training-Loss">Training Loss<a class="anchor-link" href="#Training-Loss">&#182;</a></h3><p>The model will be measured using categorical crossentropy.</p>
+<h2 id="RNN-as-Language-Model">RNN as Language Model<a class="anchor-link" href="#RNN-as-Language-Model">&#182;</a></h2><p>Using RNN as a language model is not as common as the previous approach, but there are some very good results which have better performance than the previous approach (<a href="https://arxiv.org/abs/1412.6632">Mao et al</a>). We will design a image captioning model using this method. In our approach, the word embeddings are input to the RNN, and the final state of the RNN is combined with image features and input to another neural network to predict the next word in the caption.</p>
 <h3 id="Neural-Network-Model">Neural Network Model<a class="anchor-link" href="#Neural-Network-Model">&#182;</a></h3><p>Similarily to using the RNN as language generator, the features of the images to be captioned are extracted using a VGG16 CNN that as been pretrained using ImageNet data. We use the output of the FC8 layer of VGG16 as the image feature. The weights of the VGG16 CNN are frozen when we train our RNN language generator.</p>
 <p>The words are also embedded using the pretrained wording GloVE embeddings. The embeddings are not trained further in our generative model.</p>
 <p>The word embeddings of the partially generated caption are then used as input to an LSTM RNN. The final state of the RNN is combined with the extracted image features and input to another neural network to predict the next word in the caption. A special "START" token is used to initialize the generation process, and the process is terminated when an "END" token is sampled.</p>
-<p><img src="preRNN.svg" alt="alt text"></p>
+<p><img src="postRNN.svg" alt="alt text"></p>
 <h3 id="Training">Training<a class="anchor-link" href="#Training">&#182;</a></h3><p>Since the output is generated by a fully connected layer instead of a recurrent network, at each time step only 1 word can be generated. In other words, during training, if the reference caption has n words, then n-1 training sequences will be generated, each containing one more word than the previous. For example, if the reference caption is "the weather is great and the time is now", then the training sequences would be</p>
 <table>
 <thead><tr>
@@ -12220,78 +12220,7 @@ Each character in the first string is a replacement to its corresponding index i
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="2.1-Loading-Data-Sets-Image-Id">2.1 Loading Data Sets Image Id<a class="anchor-link" href="#2.1-Loading-Data-Sets-Image-Id">&#182;</a></h2><p>The data is divided into traing/dev/test sets. The ids of the image belonging to each data set is stored in a text file. The following function loads the image ids for each data sets.</p>
-<h3 id="Note-on-Keras-tokenizer">Note on Keras tokenizer<a class="anchor-link" href="#Note-on-Keras-tokenizer">&#182;</a></h3><p>keras.preprocessing.text.Tokenizer(nb_words=None, filters=base_filter(), 
-    lower=True, split=" ")
-Class for vectorizing texts, or/and turning texts into sequences (=list of word indexes, where the word of rank i in the dataset (starting at 1) has index i).</p>
-<ul>
-<li><p>Arguments: Same as text_to_word_sequence above.</p>
-<ul>
-<li>nb_words: None or int. Maximum number of words to work with (if set, tokenization will be restricted to the top nb_words most common words in the dataset).</li>
-</ul>
-</li>
-<li><p>Methods:</p>
-<ul>
-<li><p>fit_on_texts(texts):</p>
-<ul>
-<li>Arguments:<ul>
-<li>texts: list of texts to train on.</li>
-</ul>
-</li>
-</ul>
-</li>
-<li><p>texts_to_sequences(texts)</p>
-<ul>
-<li><p>Arguments:</p>
-<ul>
-<li>texts: list of texts to turn to sequences.</li>
-<li>Return: list of sequences (one per text input).</li>
-<li>texts_to_sequences_generator(texts): generator version of the above.</li>
-</ul>
-</li>
-<li><p>Return: yield one sequence per input text.</p>
-</li>
-</ul>
-</li>
-<li><p>texts_to_matrix(texts):</p>
-<ul>
-<li>Return: numpy array of shape (len(texts), nb_words).</li>
-<li>Arguments:<ul>
-<li>texts: list of texts to vectorize.</li>
-<li>mode: one of "binary", "count", "tfidf", "freq" (default: "binary").</li>
-</ul>
-</li>
-</ul>
-</li>
-<li><p>fit_on_sequences(sequences):</p>
-<ul>
-<li>Arguments:<ul>
-<li>sequences: list of sequences to train on.</li>
-</ul>
-</li>
-</ul>
-</li>
-<li><p>sequences_to_matrix(sequences):</p>
-<ul>
-<li>Return: numpy array of shape (len(sequences), nb_words).</li>
-<li>Arguments:<ul>
-<li>sequences: list of sequences to vectorize.</li>
-<li>mode: one of "binary", "count", "tfidf", "freq" (default: "binary").</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-<li><p>Attributes:</p>
-<ul>
-<li>word_counts: dictionary mapping words (str) to the number of times they appeared on during fit. Only set after fit_on_texts was called.</li>
-<li>word_docs: dictionary mapping words (str) to the number of documents/texts they appeared on during fit. Only set after fit_on_texts was called.</li>
-<li>word_index: dictionary mapping words (str) to their rank/index (int). Only set after fit_on_texts was called.</li>
-<li>document_count: int. Number of documents (texts/sequences) the tokenizer was trained on. Only set after fit_on_texts or fit_on_sequences was called</li>
-</ul>
-</li>
-</ul>
+<h2 id="2.1-Loading-Data-Sets-Image-ID">2.1 Loading Data Sets Image ID<a class="anchor-link" href="#2.1-Loading-Data-Sets-Image-ID">&#182;</a></h2><p>The data is divided into traing/dev/test sets. The ids of the image belonging to each data set is stored in a text file. The following function loads the image ids for each data sets.</p>
 <p>We first define a function that can load the training/test/dev ids that are stored in corresponding files.</p>
 
 </div>
@@ -13124,12 +13053,11 @@ Epoch 1/1
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[300]:</div>
+<div class="prompt input_prompt">In&nbsp;[1]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">flatten</span><span class="p">(</span><span class="n">lst</span><span class="p">):</span>
-	<span class="k">return</span> <span class="nb">sum</span><span class="p">(</span> <span class="p">([</span><span class="n">x</span><span class="p">]</span> <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="nb">list</span><span class="p">)</span> <span class="k">else</span> <span class="n">flatten</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
-		     <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">lst</span><span class="p">),</span> <span class="p">[]</span> <span class="p">)</span>
+    <span class="k">return</span> <span class="nb">sum</span><span class="p">(</span> <span class="p">([</span><span class="n">x</span><span class="p">]</span> <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="nb">list</span><span class="p">)</span> <span class="k">else</span> <span class="n">flatten</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">lst</span><span class="p">),</span> <span class="p">[]</span> <span class="p">)</span>
 </pre></div>
 
 </div>
@@ -13673,6 +13601,85 @@ Epoch 1/1
 </tr>
 </tbody>
 </table>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="Appendix">Appendix<a class="anchor-link" href="#Appendix">&#182;</a></h1><h2 id="1.-Note-on-Keras-Tokenizer">1. Note on Keras Tokenizer<a class="anchor-link" href="#1.-Note-on-Keras-Tokenizer">&#182;</a></h2><p>keras.preprocessing.text.Tokenizer(nb_words=None, filters=base_filter(), 
+    lower=True, split=" ")
+Class for vectorizing texts, or/and turning texts into sequences (=list of word indexes, where the word of rank i in the dataset (starting at 1) has index i).</p>
+<ul>
+<li><p>Arguments: Same as text_to_word_sequence above.</p>
+<ul>
+<li>nb_words: None or int. Maximum number of words to work with (if set, tokenization will be restricted to the top nb_words most common words in the dataset).</li>
+</ul>
+</li>
+<li><p>Methods:</p>
+<ul>
+<li><p>fit_on_texts(texts):</p>
+<ul>
+<li>Arguments:<ul>
+<li>texts: list of texts to train on.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>texts_to_sequences(texts)</p>
+<ul>
+<li><p>Arguments:</p>
+<ul>
+<li>texts: list of texts to turn to sequences.</li>
+<li>Return: list of sequences (one per text input).</li>
+<li>texts_to_sequences_generator(texts): generator version of the above.</li>
+</ul>
+</li>
+<li><p>Return: yield one sequence per input text.</p>
+</li>
+</ul>
+</li>
+<li><p>texts_to_matrix(texts):</p>
+<ul>
+<li>Return: numpy array of shape (len(texts), nb_words).</li>
+<li>Arguments:<ul>
+<li>texts: list of texts to vectorize.</li>
+<li>mode: one of "binary", "count", "tfidf", "freq" (default: "binary").</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>fit_on_sequences(sequences):</p>
+<ul>
+<li>Arguments:<ul>
+<li>sequences: list of sequences to train on.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>sequences_to_matrix(sequences):</p>
+<ul>
+<li>Return: numpy array of shape (len(sequences), nb_words).</li>
+<li>Arguments:<ul>
+<li>sequences: list of sequences to vectorize.</li>
+<li>mode: one of "binary", "count", "tfidf", "freq" (default: "binary").</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>Attributes:</p>
+<ul>
+<li>word_counts: dictionary mapping words (str) to the number of times they appeared on during fit. Only set after fit_on_texts was called.</li>
+<li>word_docs: dictionary mapping words (str) to the number of documents/texts they appeared on during fit. Only set after fit_on_texts was called.</li>
+<li>word_index: dictionary mapping words (str) to their rank/index (int). Only set after fit_on_texts was called.</li>
+<li>document_count: int. Number of documents (texts/sequences) the tokenizer was trained on. Only set after fit_on_texts or fit_on_sequences was called</li>
+</ul>
+</li>
+</ul>
 
 </div>
 </div>
